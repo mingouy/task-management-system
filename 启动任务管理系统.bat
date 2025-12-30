@@ -36,24 +36,18 @@ if not exist "dist" (
 echo [2/3] ✓ 项目文件已就绪
 
 echo.
-echo [3/3] 启动服务器...
+echo [3/3] 启动开发服务器...
 echo.
 echo ============================================
 echo   服务器已启动！
 echo ============================================
 echo.
-echo   本地访问: http://localhost:8080
-echo.
-echo   朋友使用说明:
-echo   1. 确保电脑已安装 Node.js
-echo   2. 双击 "启动任务管理系统.bat"
-echo   3. 告诉朋友你的IP地址
-echo   4. 朋友在浏览器访问 http://你的IP:8080
+echo   本地访问: http://localhost:5173
 echo.
 echo   按 Ctrl+C 可停止服务器
 echo ============================================
 echo.
 
-node "%~dp0server.js"
+npm run dev
 
 pause

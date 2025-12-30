@@ -72,22 +72,34 @@
     <!-- 任务状态占比 -->
     <div class="stats-section">
       <h3 class="section-title">状态占比</h3>
-      <div class="pie-chart-container">
-        <div class="pie-chart" :style="pieChartStyle">
+      <div class="bar-chart-container">
+        <div class="bar-chart">
           <div 
-            class="pie-slice todo" 
-            :style="{ clipPath: todoClipPath }"
-          ></div>
+            class="bar todo" 
+            :style="{ height: todoPercentage + '%' }"
+            title="待办: {{ todoPercentage }}%"
+          >
+            <span class="bar-label">待办</span>
+            <span class="bar-value">{{ todoPercentage }}%</span>
+          </div>
           <div 
-            class="pie-slice in-progress" 
-            :style="{ clipPath: inProgressClipPath, transform: inProgressTransform }"
-          ></div>
+            class="bar in-progress" 
+            :style="{ height: inProgressPercentage + '%' }"
+            title="进行中: {{ inProgressPercentage }}%"
+          >
+            <span class="bar-label">进行中</span>
+            <span class="bar-value">{{ inProgressPercentage }}%</span>
+          </div>
           <div 
-            class="pie-slice done" 
-            :style="{ clipPath: doneClipPath, transform: doneTransform }"
-          ></div>
+            class="bar done" 
+            :style="{ height: completedPercentage + '%' }"
+            title="已完成: {{ completedPercentage }}%"
+          >
+            <span class="bar-label">已完成</span>
+            <span class="bar-value">{{ completedPercentage }}%</span>
+          </div>
         </div>
-        <div class="pie-legend">
+        <div class="bar-legend">
           <div class="legend-item">
             <span class="legend-dot todo"></span>
             <span class="legend-text">待办 ({{ todoTasks }})</span>
@@ -170,7 +182,7 @@ const todayTasks = computed(() => {
   }).length;
 });
 
-// 各状态进度百分比
+// 各状态进度百分比（用于进度条）
 const todoProgress = computed(() => {
   if (totalTasks.value === 0) return 0;
   return Math.round((todoTasks.value / totalTasks.value) * 100);
@@ -186,41 +198,20 @@ const doneProgress = computed(() => {
   return Math.round((completedTasks.value / totalTasks.value) * 100);
 });
 
-// 饼图样式计算
-const pieChartStyle = computed(() => {
-  return {
-    width: '200px',
-    height: '200px'
-  };
+// 各状态百分比（用于梯形图）
+const todoPercentage = computed(() => {
+  if (totalTasks.value === 0) return 0;
+  return Math.round((todoTasks.value / totalTasks.value) * 100);
 });
 
-// 计算饼图切片的clipPath和transform
-const todoClipPath = computed(() => {
-  if (todoTasks.value === 0) return 'circle(0% at 50% 50%)';
-  const angle = (todoTasks.value / totalTasks.value) * 360;
-  if (angle >= 360) return 'circle(50% at 50% 50%)';
-  return `polygon(50% 50%, 50% 0%, ${50 + 50 * Math.cos((angle - 90) * Math.PI / 180)}% ${50 + 50 * Math.sin((angle - 90) * Math.PI / 180)}%)`;
+const inProgressPercentage = computed(() => {
+  if (totalTasks.value === 0) return 0;
+  return Math.round((inProgressTasks.value / totalTasks.value) * 100);
 });
 
-const inProgressClipPath = computed(() => {
-  if (inProgressTasks.value === 0) return 'circle(0% at 50% 50%)';
-  return 'polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%)';
-});
-
-const inProgressTransform = computed(() => {
-  const todoAngle = (todoTasks.value / totalTasks.value) * 360;
-  return `rotate(${todoAngle}deg)`;
-});
-
-const doneClipPath = computed(() => {
-  if (completedTasks.value === 0) return 'circle(0% at 50% 50%)';
-  return 'polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 50% 100%)';
-});
-
-const doneTransform = computed(() => {
-  const todoAngle = (todoTasks.value / totalTasks.value) * 360;
-  const inProgressAngle = (inProgressTasks.value / totalTasks.value) * 360;
-  return `rotate(${todoAngle + inProgressAngle}deg)`;
+const completedPercentage = computed(() => {
+  if (totalTasks.value === 0) return 0;
+  return Math.round((completedTasks.value / totalTasks.value) * 100);
 });
 </script>
 
@@ -361,44 +352,101 @@ const doneTransform = computed(() => {
   background-color: #67c23a;
 }
 
-/* 饼图样式 */
-.pie-chart-container {
+/* 柱状图样式 */
+.bar-chart-container {
   display: flex;
   align-items: center;
   gap: 2rem;
   flex-wrap: wrap;
 }
 
-.pie-chart {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 400px;
+  height: 250px;
+  padding: 1.5rem;
+  background-color: #f5f7fa;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
-  background-color: #f5f7fa;
 }
 
-.pie-slice {
+.bar-chart::before {
+  content: '';
   position: absolute;
-  width: 100%;
-  height: 100%;
-  transform-origin: center;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #ebeef5;
+}
+
+.bar {
+  flex: 1;
+  background-color: #409eff;
+  border-radius: 4px 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.75rem;
+  color: white;
   transition: all 0.3s ease;
+  min-width: 80px;
+  position: relative;
+  animation: barGrow 1s ease-out forwards;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: bottom center;
 }
 
-.pie-slice.todo {
+@keyframes barGrow {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.bar:hover {
+  transform: scaleY(1.05);
+}
+
+.bar.todo {
   background-color: #f56c6c;
+  animation-delay: 0.1s;
 }
 
-.pie-slice.in-progress {
+.bar.in-progress {
   background-color: #e6a23c;
+  animation-delay: 0.2s;
 }
 
-.pie-slice.done {
+.bar.done {
   background-color: #67c23a;
+  animation-delay: 0.3s;
 }
 
-.pie-legend {
+.bar-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bar-value {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bar-legend {
   flex: 1;
   min-width: 200px;
 }
@@ -467,14 +515,27 @@ const doneTransform = computed(() => {
     grid-template-columns: 1fr;
   }
   
-  .pie-chart-container {
+  .bar-chart-container {
     flex-direction: column;
     align-items: center;
   }
   
-  .pie-chart {
-    width: 150px;
-    height: 150px;
+  .bar-chart {
+    width: 100%;
+    max-width: 400px;
+    height: 220px;
+  }
+  
+  .bar {
+    min-width: 60px;
+  }
+  
+  .bar-label {
+    font-size: 0.8rem;
+  }
+  
+  .bar-value {
+    font-size: 1.1rem;
   }
   
   .card-value {

@@ -2,6 +2,9 @@
   <section class="home-view">
     <h2 class="view-title">任务管理</h2>
     
+    <!-- 任务日历 -->
+    <Calendar :tasks="tasks" />
+    
     <!-- 任务统计面板 -->
     <TaskStatsPanel :tasks="tasks" />
     
@@ -20,6 +23,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 // 导入组件
+import Calendar from '../components/Calendar.vue'; // 任务日历组件
 import TaskStatsPanel from '../components/TaskStatsPanel.vue'; // 任务统计面板
 import TaskInput from '../components/TaskInput.vue'; // 任务输入组件
 import TaskList from '../components/TaskList.vue'; // 任务列表组件

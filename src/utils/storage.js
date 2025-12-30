@@ -94,3 +94,30 @@ export const STATUS_TEXT = {
   [TASK_STATUS.IN_PROGRESS]: '进行中',
   [TASK_STATUS.DONE]: '已完成'
 };
+
+/**
+ * 任务优先级枚举
+ */
+export const TASK_PRIORITY = {
+  HIGH: 'high',
+  MEDIUM: 'medium',
+  LOW: 'low'
+};
+
+/**
+ * 优先级显示文本映射
+ */
+export const PRIORITY_TEXT = {
+  [TASK_PRIORITY.HIGH]: '高',
+  [TASK_PRIORITY.MEDIUM]: '中',
+  [TASK_PRIORITY.LOW]: '低'
+};
+
+/**
+ * 优先级颜色映射
+ */
+export const PRIORITY_COLOR = {
+  [TASK_PRIORITY.HIGH]: '#f56c6c',
+  [TASK_PRIORITY.MEDIUM]: '#e6a23c',
+  [TASK_PRIORITY.LOW]: '#67c23a'
+};
