@@ -95,11 +95,11 @@
         <div class="author-info">
           <div class="author-avatar">👨‍🎓</div>
           <div class="author-details">
-            <h4 class="author-name">欧阳明</h4>
-            <p class="author-student-id">学号：5720232802</p>
-            <p class="author-class">班级：软金231</p>
-            <p class="author-course">课程：ASP.NET程序设计</p>
-            <p class="author-date">日期：2025年12月</p>
+            <h4 class="author-name">郑长盛</h4>
+          <p class="author-student-id">学号：5720232809</p>
+          <p class="author-class">班级：软金231</p>
+          <p class="author-course">课程：ASP.NET程序设计</p>
+          <p class="author-date">日期：2026年1月</p>
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@
       <!-- 版权信息 -->
       <div class="about-section copyright">
         <p class="copyright-text">
-          © 2025 任务管理系统 - 高校《ASP.NET程序设计》课程期末大作业
+          © 2026 任务管理系统 - 高校《ASP.NET程序设计》课程期末大作业
         </p>
         <p class="copyright-text">
           基于 Vue 3 开发，采用 MIT 开源协议
